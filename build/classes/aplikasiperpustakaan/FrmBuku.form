@@ -284,6 +284,9 @@
               <Font name="Calisto MT" size="12" style="0"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtJumlahBukuKeyTyped"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JComboBox" name="cbLokasi">
           <Properties>
@@ -365,6 +368,9 @@
               <Font name="Calisto MT" size="12" style="0"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtTahunTerbitKeyTyped"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="txtId">
         </Component>

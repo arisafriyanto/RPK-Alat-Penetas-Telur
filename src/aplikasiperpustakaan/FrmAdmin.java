@@ -140,13 +140,28 @@ public class FrmAdmin extends javax.swing.JFrame {
     public void saveData() {
         loadData();
         try {
-            Statement stat = (Statement)Koneksi.koneksiDB().createStatement();
-            String sql = "insert into admin (username, password, nama_lengkap) values ('"+username+"','"+password+"','"+nama_lengkap+"')";
-            PreparedStatement p = (PreparedStatement)Koneksi.koneksiDB().prepareStatement(sql);
-            p.executeUpdate();
-            
-            getData();
-            JOptionPane.showMessageDialog(null, "Data admin berhasil ditambahkan");
+            if(txtUsername.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Username tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtUsername.requestFocus();
+            }else if(txtPassword.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Password tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtPassword.requestFocus();
+            }else if(txtNamaLengkap.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Nama lengkap tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtNamaLengkap.requestFocus();
+            }else{
+                Statement stat = (Statement)Koneksi.koneksiDB().createStatement();
+                String sql = "insert into admin (username, password, nama_lengkap) "
+                            + "values ('"+username+"','"+password+"','"+nama_lengkap+"')";
+                PreparedStatement p = (PreparedStatement)Koneksi.koneksiDB().prepareStatement(sql);
+                p.executeUpdate();
+
+                getData();
+                clearForm();
+                JOptionPane.showMessageDialog(null, "Data admin berhasil ditambahkan");
+                
+                btnSimpanEnabled();
+            }
         } catch (Exception error) {
             JOptionPane.showMessageDialog(null, error.getMessage());
         }
@@ -155,15 +170,28 @@ public class FrmAdmin extends javax.swing.JFrame {
     public void editData() {
         loadData();
         try {
-            Statement st = (Statement)Koneksi.koneksiDB().createStatement();
-            String sql = "update admin set username='"+username+"', password='"+password+"', nama_lengkap='"+nama_lengkap+"' where"
-                    + " id='"+id+"' ";
-            PreparedStatement ps = (PreparedStatement)Koneksi.koneksiDB().prepareStatement(sql);
-            ps.executeUpdate();
-            
-            getData();
-            JOptionPane.showMessageDialog(null, "Data admin berhasil diedit");
-            selectData();
+            if(txtUsername.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Username tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtUsername.requestFocus();
+            }else if(txtPassword.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Password tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtPassword.requestFocus();
+            }else if(txtNamaLengkap.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Nama lengkap tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtNamaLengkap.requestFocus();
+            }else{
+                Statement st = (Statement)Koneksi.koneksiDB().createStatement();
+                String sql = "update admin set username='"+username+"', password='"+password+"',"
+                            + " nama_lengkap='"+nama_lengkap+"' where id='"+id+"' ";
+                PreparedStatement ps = (PreparedStatement)Koneksi.koneksiDB().prepareStatement(sql);
+                ps.executeUpdate();
+
+                getData();
+                clearForm();
+                JOptionPane.showMessageDialog(null, "Data admin berhasil diedit");
+                
+                btnEditHapusEnabled();
+            }
         } catch (Exception error) {
             JOptionPane.showMessageDialog(null, error.getMessage());
         }
@@ -183,7 +211,10 @@ public class FrmAdmin extends javax.swing.JFrame {
                 pst.executeUpdate();
                 
                 getData();
+                clearForm();
                 JOptionPane.showMessageDialog(null, "Data admin berhasil dihapus"); 
+                
+                btnEditHapusEnabled();
             } catch (Exception error) {
                 JOptionPane.showMessageDialog(null, error.getMessage());
             }
@@ -432,8 +463,6 @@ public class FrmAdmin extends javax.swing.JFrame {
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         saveData();
-        clearForm();
-        btnSimpanEnabled();
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void tblAdminMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAdminMouseClicked
@@ -443,14 +472,10 @@ public class FrmAdmin extends javax.swing.JFrame {
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         editData();
-        clearForm();
-        btnEditHapusEnabled();
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         hapusData();
-        clearForm();
-        btnEditHapusEnabled();
     }//GEN-LAST:event_btnHapusActionPerformed
 
     public static void main(String args[]) {

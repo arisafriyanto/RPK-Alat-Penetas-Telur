@@ -150,14 +150,34 @@ public class FrmMahasiswa extends javax.swing.JFrame {
     public void saveData() {
         loadData();
         try {
-            Statement stat = (Statement)Koneksi.koneksiDB().createStatement();
-            String sql = "insert into mahasiswa (nim, nama, jenis_kelamin, kelas, prodi) "
-                        + "values ('"+nim+"','"+nama+"','"+jenis_kelamin+"','"+kelas+"','"+prodi+"')";
-            PreparedStatement p = (PreparedStatement)Koneksi.koneksiDB().prepareStatement(sql);
-            p.executeUpdate();
-            
-            getData();
-            JOptionPane.showMessageDialog(null, "Data mahasiswa berhasil ditambahkan");
+            if(txtNim.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Nim tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtNim.requestFocus();
+            }else if(txtNamaMahasiswa.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Nama mahasiswa tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtNamaMahasiswa.requestFocus();
+            }else if(cbJenisKelamin.getSelectedItem().equals("")) {
+                JOptionPane.showMessageDialog(null, "Jenis kelamin tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                cbJenisKelamin.requestFocus();
+            }else if(txtKelas.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Kelas tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtKelas.requestFocus();
+            }else if(cbProdi.getSelectedItem().equals("")) {
+                JOptionPane.showMessageDialog(null, "Prodi tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                cbProdi.requestFocus();
+            }else{
+                Statement stat = (Statement)Koneksi.koneksiDB().createStatement();
+                String sql = "insert into mahasiswa (nim, nama, jenis_kelamin, kelas, prodi) "
+                            + "values ('"+nim+"','"+nama+"','"+jenis_kelamin+"','"+kelas+"','"+prodi+"')";
+                PreparedStatement p = (PreparedStatement)Koneksi.koneksiDB().prepareStatement(sql);
+                p.executeUpdate();
+
+                getData();
+                clearForm();
+                JOptionPane.showMessageDialog(null, "Data mahasiswa berhasil ditambahkan");
+
+                btnSimpanEnabled();
+            }
         } catch (Exception error) {
             JOptionPane.showMessageDialog(null, error.getMessage());
         }
@@ -166,16 +186,35 @@ public class FrmMahasiswa extends javax.swing.JFrame {
     public void editData() {
         loadData();
         try {
-            Statement st = (Statement)Koneksi.koneksiDB().createStatement();
-            String sql = "update mahasiswa set "
-                    + "nim='"+nim+"', nama='"+nama+"', jenis_kelamin='"+jenis_kelamin+"', kelas='"+kelas+"', prodi='"+prodi+"'"
-                    + "where id='"+id+"' ";
-            PreparedStatement ps = (PreparedStatement)Koneksi.koneksiDB().prepareStatement(sql);
-            ps.executeUpdate();
-            
-            getData();
-            selectData();
-            JOptionPane.showMessageDialog(null, "Data mahasiswa berhasil diedit");
+            if(txtNim.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Nim tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtNim.requestFocus();
+            }else if(txtNamaMahasiswa.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Nama mahasiswa tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtNamaMahasiswa.requestFocus();
+            }else if(cbJenisKelamin.getSelectedItem().equals("")) {
+                JOptionPane.showMessageDialog(null, "Jenis kelamin tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                cbJenisKelamin.requestFocus();
+            }else if(txtKelas.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Kelas tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtKelas.requestFocus();
+            }else if(cbProdi.getSelectedItem().equals("")) {
+                JOptionPane.showMessageDialog(null, "Prodi tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                cbProdi.requestFocus();
+            }else{
+                Statement st = (Statement)Koneksi.koneksiDB().createStatement();
+                String sql = "update mahasiswa set "
+                        + "nim='"+nim+"', nama='"+nama+"', jenis_kelamin='"+jenis_kelamin+"', kelas='"+kelas+"', prodi='"+prodi+"'"
+                        + "where id='"+id+"' ";
+                PreparedStatement ps = (PreparedStatement)Koneksi.koneksiDB().prepareStatement(sql);
+                ps.executeUpdate();
+
+                getData();
+                clearForm();
+                JOptionPane.showMessageDialog(null, "Data mahasiswa berhasil diedit");
+                
+                btnEditHapusEnabled();
+            }
         } catch (Exception error) {
             JOptionPane.showMessageDialog(null, error.getMessage());
         }
@@ -195,7 +234,10 @@ public class FrmMahasiswa extends javax.swing.JFrame {
                 pst.executeUpdate();
                 
                 getData();
+                clearForm();
                 JOptionPane.showMessageDialog(null, "Data mahasiswa berhasil dihapus"); 
+                
+                btnEditHapusEnabled();
             } catch (Exception error) {
                 JOptionPane.showMessageDialog(null, error.getMessage());
             }
@@ -470,8 +512,6 @@ public class FrmMahasiswa extends javax.swing.JFrame {
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         saveData();
-        clearForm();
-        btnSimpanEnabled();
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void tblMahasiswaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMahasiswaMouseClicked
@@ -481,14 +521,10 @@ public class FrmMahasiswa extends javax.swing.JFrame {
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         editData();
-        clearForm();
-        btnEditHapusEnabled();
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         hapusData();
-        clearForm();
-        btnEditHapusEnabled();
     }//GEN-LAST:event_btnHapusActionPerformed
 
     public static void main(String args[]) {

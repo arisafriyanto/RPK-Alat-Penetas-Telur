@@ -6,11 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
 public class FrmBuku extends javax.swing.JFrame {
     
     public DefaultTableModel model;
-    String id, judul, pengarang, penerbit, isbn, lokasi;
-    int tahun_terbit, jumlah_buku;
+    String id, judul, pengarang, penerbit, isbn, lokasi, tahun_terbit, jumlah_buku;
 
     public FrmBuku() {
         initComponents();
@@ -33,7 +33,7 @@ public class FrmBuku extends javax.swing.JFrame {
         btnHapus.setEnabled(false);
         btnSimpan.setEnabled(false);
     }
-    
+       
     public void getData() {
         model.getDataVector().removeAllElements();
         model.fireTableDataChanged();
@@ -101,9 +101,9 @@ public class FrmBuku extends javax.swing.JFrame {
         judul        = txtJudul.getText();
         pengarang    = txtPengarang.getText();
         penerbit     = txtPenerbit.getText();
-        tahun_terbit = Integer.parseInt(txtTahunTerbit.getText());
+        tahun_terbit = txtTahunTerbit.getText();
         isbn         = txtIsbn.getText();
-        jumlah_buku  = Integer.parseInt(txtJumlahBuku.getText());
+        jumlah_buku  = txtJumlahBuku.getText();
         lokasi       = (String)cbLokasi.getSelectedItem();
     }
     
@@ -121,7 +121,7 @@ public class FrmBuku extends javax.swing.JFrame {
         txtIsbn.setText(""+model.getValueAt(i, 5));
         txtJumlahBuku.setText(""+model.getValueAt(i, 6));
         cbLokasi.setSelectedItem(""+model.getValueAt(i, 7));
-        
+
         active();
     }
     
@@ -166,14 +166,42 @@ public class FrmBuku extends javax.swing.JFrame {
     public void saveData() {
         loadData();
         try {
-            Statement stat = (Statement)Koneksi.koneksiDB().createStatement();
-            String sql = "insert into buku (judul, pengarang, penerbit, tahun_terbit, isbn, jumlah_buku, lokasi) "
-                        + "values ('"+judul+"','"+pengarang+"','"+penerbit+"','"+tahun_terbit+"','"+isbn+"','"+jumlah_buku+"','"+lokasi+"')";
-            PreparedStatement p = (PreparedStatement)Koneksi.koneksiDB().prepareStatement(sql);
-            p.executeUpdate();
-            
-            getData();
-            JOptionPane.showMessageDialog(null, "Data buku berhasil ditambahkan");
+            if(txtJudul.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Judul tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtJudul.requestFocus();
+            }else if(txtPengarang.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Pengarang tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtPengarang.requestFocus();
+            }else if(txtPenerbit.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Penerbit tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtPenerbit.requestFocus();
+            }
+            else if(txtTahunTerbit.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Tahun terbit tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtTahunTerbit.requestFocus();
+            }else if(txtIsbn.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Isbn tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtIsbn.requestFocus();
+            }else if(txtJumlahBuku.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Jumlah buku tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtJumlahBuku.requestFocus();
+            }else if(cbLokasi.getSelectedItem().equals("")) {
+                JOptionPane.showMessageDialog(null, "Lokasi tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                cbLokasi.requestFocus();
+            }else{
+                Statement stat = (Statement)Koneksi.koneksiDB().createStatement();
+                String sql = "insert into buku (judul, pengarang, penerbit, tahun_terbit, isbn, jumlah_buku, lokasi) "
+                            + "values ('"+judul+"','"+pengarang+"','"+penerbit+"','"+tahun_terbit+"','"+isbn+"',"
+                            + "'"+jumlah_buku+"','"+lokasi+"')";
+                PreparedStatement p = (PreparedStatement)Koneksi.koneksiDB().prepareStatement(sql);
+                p.executeUpdate();
+
+                getData();
+                clearForm();
+                JOptionPane.showMessageDialog(null, "Data buku berhasil ditambahkan");
+
+                btnSimpanEnabled();
+            }
         } catch (Exception error) {
             JOptionPane.showMessageDialog(null, error.getMessage());
         }
@@ -182,16 +210,40 @@ public class FrmBuku extends javax.swing.JFrame {
     public void editData() {
         loadData();
         try {
-            Statement st = (Statement)Koneksi.koneksiDB().createStatement();
-            String sql = "update buku set "
-                        + "judul='"+judul+"', pengarang='"+pengarang+"', penerbit='"+penerbit+"', tahun_terbit='"+tahun_terbit+"',"
-                        + " isbn='"+isbn+"', jumlah_buku='"+jumlah_buku+"', lokasi='"+lokasi+"' where id='"+id+"' "; 
-            PreparedStatement ps = (PreparedStatement)Koneksi.koneksiDB().prepareStatement(sql);
-            ps.executeUpdate();
-            
-            getData();
-            JOptionPane.showMessageDialog(null, "Data buku berhasil diedit");
-            selectData();
+            if(txtJudul.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Judul tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtJudul.requestFocus();
+            }else if(txtPengarang.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Pengarang tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtPengarang.requestFocus();
+            }else if(txtPenerbit.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Penerbit tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtPenerbit.requestFocus();
+            }
+            else if(txtTahunTerbit.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Tahun terbit tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtTahunTerbit.requestFocus();
+            }else if(txtIsbn.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Isbn tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtIsbn.requestFocus();
+            }else if(txtJumlahBuku.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Jumlah buku tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtJumlahBuku.requestFocus();
+            }else if(cbLokasi.getSelectedItem().equals("")) {
+                JOptionPane.showMessageDialog(null, "Lokasi tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                cbLokasi.requestFocus();
+            }else{
+                Statement st = (Statement)Koneksi.koneksiDB().createStatement();
+                String sql = "update buku set "
+                            + "judul='"+judul+"', pengarang='"+pengarang+"', penerbit='"+penerbit+"', tahun_terbit='"+tahun_terbit+"',"
+                            + " isbn='"+isbn+"', jumlah_buku='"+jumlah_buku+"', lokasi='"+lokasi+"' where id='"+id+"' "; 
+                PreparedStatement ps = (PreparedStatement)Koneksi.koneksiDB().prepareStatement(sql);
+                ps.executeUpdate();
+
+                getData();
+                clearForm();
+                JOptionPane.showMessageDialog(null, "Data buku berhasil diedit");
+            }
         } catch (Exception error) {
             JOptionPane.showMessageDialog(null, error.getMessage());
         }
@@ -211,6 +263,7 @@ public class FrmBuku extends javax.swing.JFrame {
                 pst.executeUpdate();
                 
                 getData();
+                clearForm();
                 JOptionPane.showMessageDialog(null, "Data buku berhasil dihapus"); 
             } catch (Exception error) {
                 JOptionPane.showMessageDialog(null, error.getMessage());
@@ -306,6 +359,11 @@ public class FrmBuku extends javax.swing.JFrame {
         txtIsbn.setFont(new java.awt.Font("Calisto MT", 0, 12)); // NOI18N
 
         txtJumlahBuku.setFont(new java.awt.Font("Calisto MT", 0, 12)); // NOI18N
+        txtJumlahBuku.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtJumlahBukuKeyTyped(evt);
+            }
+        });
 
         cbLokasi.setFont(new java.awt.Font("Calisto MT", 0, 12)); // NOI18N
         cbLokasi.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Rak 1", "Rak 2", "Rak 3", "Rak 4", "Rak 5" }));
@@ -351,6 +409,11 @@ public class FrmBuku extends javax.swing.JFrame {
         });
 
         txtTahunTerbit.setFont(new java.awt.Font("Calisto MT", 0, 12)); // NOI18N
+        txtTahunTerbit.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTahunTerbitKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -510,8 +573,6 @@ public class FrmBuku extends javax.swing.JFrame {
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         saveData();
-        clearForm();
-        btnSimpanEnabled();
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void tblBukuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBukuMouseClicked
@@ -521,15 +582,30 @@ public class FrmBuku extends javax.swing.JFrame {
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         editData();
-        clearForm();
         btnEditHapusEnabled();
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         hapusData();
-        clearForm();
         btnEditHapusEnabled();
     }//GEN-LAST:event_btnHapusActionPerformed
+
+    //  Validasi inputan hanya bisa angka
+    private void txtTahunTerbitKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTahunTerbitKeyTyped
+        char enter=evt.getKeyChar();
+
+        if(!(Character.isDigit(enter))) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtTahunTerbitKeyTyped
+
+    private void txtJumlahBukuKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtJumlahBukuKeyTyped
+        char enter=evt.getKeyChar();
+
+        if(!(Character.isDigit(enter))) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtJumlahBukuKeyTyped
 
     
     public static void main(String args[]) {
